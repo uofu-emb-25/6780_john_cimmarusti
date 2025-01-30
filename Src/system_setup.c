@@ -1,5 +1,4 @@
 #include "main.h"
-#include <stm32f0xx_hal.h>
 #include <stm32f072b_discovery.h>
 
 /**
