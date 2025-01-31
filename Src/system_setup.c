@@ -1,5 +1,5 @@
 #include "main.h"
-#include <stm32f072b_discovery.h>
+#include <stm32f0xx_hal.h>
 
 /**
   * @brief  This function is executed in case of error occurrence.
@@ -14,6 +14,20 @@ void Error_Handler(void)
   }
 }
 
+
+void My_HAL_RCC_GPIOC_CLK_ENABLE(void) {
+    //RCC->AHBENR |= RCC_AHBENR_GPIOAEN; 
+    RCC->AHBENR |= RCC_AHBENR_GPIOCEN;  // Enable GPIOC clock
+}
+void My_HAL_RCC_GPIOA_CLK_ENABLE(void) {
+    RCC->AHBENR |= RCC_AHBENR_GPIOAEN; 
+    //RCC->AHBENR |= RCC_AHBENR_GPIOCEN;  // Enable GPIOC clock
+}
+
+//int My_HAL_RCC_GPIOC_CLK_ENABLE(void)
+//{
+ // RCC->APB1ENR |= RCC_APB1ENR_TIM2EN; // Enable peripheral clock to TIMER2
+//}
 /**
   * @brief  System Clock Configuration
   *         The system Clock is configured as follow :
