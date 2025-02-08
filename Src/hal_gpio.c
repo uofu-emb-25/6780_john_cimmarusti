@@ -94,6 +94,7 @@ uint32_t debouncer = 0;
 GPIO_PinState My_HAL_Debounce_ReadPin(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin) {
     debouncer = (debouncer << 1); // Shift left every loop iteration
 
+
     if (My_HAL_GPIO_ReadPin(0) ) { 
         debouncer |= 0x01; // Set lowest bit when button is pressed
     }

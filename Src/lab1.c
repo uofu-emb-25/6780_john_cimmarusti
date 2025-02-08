@@ -40,7 +40,7 @@ int lab1_main(void) {
     My_HAL_GPIO_WritePin(GPIOC, GPIO_PIN_6, 1); // Red LED ON
     My_HAL_GPIO_WritePin(GPIOC, GPIO_PIN_7, 0); // Blue LED OFF
 
-
+//
     while (1) {
 
    // if (My_HAL_GPIO_ReadPin(0)) { // If button is pressed
@@ -51,12 +51,13 @@ int lab1_main(void) {
 
         // Another debounce delay
     //    HAL_Delay(50);
+
     if (My_HAL_Debounce_ReadPin(GPIOC,  GPIO_PIN_0)== GPIO_PIN_SET) {
         My_HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_6); // Toggle Red LED
         My_HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_7); // Toggle Blue LED
     }
 
-    HAL_Delay(5); // Small delay to prevent excessive CPU usage
+    HAL_Delay(6); // Small delay to prevent excessive CPU usage
      
     }
 }
