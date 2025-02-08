@@ -19,9 +19,9 @@ void My_HAL_RCC_GPIOC_CLK_ENABLE(void) {
     //RCC->AHBENR |= RCC_AHBENR_GPIOAEN; 
     RCC->AHBENR |= RCC_AHBENR_GPIOCEN;  // Enable GPIOC clock
 }
+
 void My_HAL_RCC_GPIOA_CLK_ENABLE(void) {
-    RCC->AHBENR |= RCC_AHBENR_GPIOAEN; 
-    //RCC->AHBENR |= RCC_AHBENR_GPIOCEN;  // Enable GPIOC clock
+    RCC->AHBENR |= RCC_AHBENR_GPIOAEN;  // Enable GPIOA clock
 }
 
 //int My_HAL_RCC_GPIOC_CLK_ENABLE(void)

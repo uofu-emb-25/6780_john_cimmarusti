@@ -20,7 +20,7 @@
 #include "main.h"
 #include <stm32f0xx_hal.h>
 #include <stm32f0xx_it.h>
-
+#include "hal_gpio.h"
 /******************************************************************************/
 /*            Cortex-M0 Processor Exceptions Handlers                         */
 /******************************************************************************/
@@ -70,10 +70,19 @@ void PendSV_Handler(void)
   * @param  None
   * @retval None
   */
-void SysTick_Handler(void)
-{
+volatile uint32_t tick_counter = 0; // Counter variable for timing
+void SysTick_Handler(void) {
     HAL_IncTick();
+    HAL_SYSTICK_IRQHandler(); // Keep HAL's functionality
+
+    tick_counter++; // Increment every 1ms
+
+    if (tick_counter >= 200) { // Every 200ms
+        HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_7); // Toggle Blue LED (PC7)
+        tick_counter = 0; // Reset counter
+    }
 }
+
 
 /******************************************************************************/
 /*                 STM32F0xx Peripherals Interrupt Handlers                   */
@@ -90,3 +99,20 @@ void SysTick_Handler(void)
 /*void PPP_IRQHandler(void)
 {
 }*/
+
+void EXTI0_1_IRQHandler(void) {
+    if (EXTI->PR & EXTI_PR_PR0) { // Check if EXTI0 caused the interrupt
+        EXTI->PR |= EXTI_PR_PR0;  // Clear the EXTI pending flag for line 0
+
+        // First toggle: Swap Green (PC8) and Orange (PC9) LEDs
+        HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_8);
+        HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_9);
+
+        // Long delay (~1-2 seconds) - BAD PRACTICE IN INTERRUPTS!
+        for (volatile int i = 0; i < 1500000; i++);
+
+        // Second toggle: Swap Green (PC8) and Orange (PC9) LEDs again
+        HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_8);
+        HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_9);
+    }
+}
