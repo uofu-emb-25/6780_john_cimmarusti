@@ -5,14 +5,24 @@
 void My_HAL_GPIO_Init(GPIO_TypeDef  *GPIOx, GPIO_InitTypeDef *GPIO_Init){
     GPIOC->MODER &= ~(0b11 << 12); // Clear PC8 mode bits
     GPIOC->MODER &= ~(0b11 << 14); // Clear PC9 mode bits
+    GPIOC->MODER &= ~(0b11 << 16); // Clear PC8 mode bits
+    GPIOC->MODER &= ~(0b11 << 18); // Clear PC9 mode bits
     GPIOC->MODER |=  (0b01 << 12); // Set PC8 to output mode
-   GPIOC->MODER |=  (0b01 << 14); // Set PC9 to output mode
+    GPIOC->MODER |=  (0b01 << 14); // Set PC9 to output mode
+   GPIOC->MODER |=  (0b01 << 16); // Set PC8 to output mode
+   GPIOC->MODER |=  (0b01 << 18); // Set PC9 to output mode
     GPIOC->OTYPER &= ~(1 << 12); // PC8 push-pull
     GPIOC->OTYPER &= ~(1 << 14); // PC9 push-pull
+    GPIOC->OTYPER &= ~(1 << 16); // PC8 push-pull
+    GPIOC->OTYPER &= ~(1 << 18); // PC9 push-pull
     GPIOC->OSPEEDR &= ~(0b11 << 12); // Set PC8 to low speed
    GPIOC->OSPEEDR &= ~(0b11 << 14); // Set PC9 to low speed
+   GPIOC->OSPEEDR &= ~(0b11 << 16); // Set PC8 to low speed
+   GPIOC->OSPEEDR &= ~(0b11 << 18); // Set PC9 to low speed
     GPIOC->PUPDR &= ~(0b11 << 12); // No pull-up/down for PC8
     GPIOC->PUPDR &= ~(0b11 << 14); // No pull-up/down for PC
+    GPIOC->PUPDR &= ~(0b11 << 16); // No pull-up/down for PC8
+    GPIOC->PUPDR &= ~(0b11 << 18); // No pull-up/down for PC
 }
 void My_HAL_GPIO_Init_Button(GPIO_TypeDef* GPIOx, GPIO_InitTypeDef* GPIO_InitStruct) {
     // Configure mode
@@ -93,7 +103,6 @@ uint32_t debouncer = 0;
 
 GPIO_PinState My_HAL_Debounce_ReadPin(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin) {
     debouncer = (debouncer << 1); // Shift left every loop iteration
-
 
     if (My_HAL_GPIO_ReadPin(0) ) { 
         debouncer |= 0x01; // Set lowest bit when button is pressed
