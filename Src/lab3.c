@@ -5,7 +5,7 @@
 void EXTI0_1_IRQHandler(void);
 #define SysTick_IRQn -1  // SysTick interrupt number
 
-int lab2_main(void) {
+int lab3_main(void) {
     HAL_Init(); // Reset of all peripherals, init the Flash and Systick
     SystemClock_Config(); //Configure the system clock
     /* This example uses HAL library calls to control
