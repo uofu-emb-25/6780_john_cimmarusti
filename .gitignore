@@ -1,4 +1,4 @@
-gibuild
+build
 *.elf
 *.bin
 .vscode

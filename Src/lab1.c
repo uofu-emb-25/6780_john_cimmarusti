@@ -59,6 +59,7 @@ int lab_main(void) {
 #include <stm32f0xx_hal.h>
 #include "hal_gpio.h"
 void EXTI0_1_IRQHandler(void);
+#define SysTick_IRQn -1  // SysTick interrupt number
 
 int lab1_main(void) {
     HAL_Init(); // Reset of all peripherals, init the Flash and Systick
@@ -71,6 +72,7 @@ int lab1_main(void) {
     My_HAL_RCC_GPIOA_CLK_ENABLE(); // Enable the GPIOC clock in the RCC
     // Set up a configuration struct to pass to the initialization function
     GPIO_InitTypeDef GPIO_InitStruct = {0};
+    
 
     // Initialize LED pins
     GPIO_InitStruct.Pin = GPIO_PIN_6 | GPIO_PIN_7;
@@ -108,9 +110,14 @@ int lab1_main(void) {
     EXTI->RTSR |= EXTI_RTSR_TR0; // Rising-edge trigger for EXTI0
 
     // Enable NVIC for EXTI0
-    HAL_NVIC_SetPriority(EXTI0_1_IRQn, 2, 0);
+    HAL_NVIC_SetPriority(EXTI0_1_IRQn, 3, 0);
     //NVIC_SetPriority(EXTI0_1_IRQn, 1);
     HAL_NVIC_EnableIRQ(EXTI0_1_IRQn);
+       // Change SysTick priority to 2 (medium priority)
+    NVIC_SetPriority(SysTick_IRQn, 1);
+
+    // Ensure EXTI0 interrupt has higher priority (set to 1)
+    NVIC_SetPriority(EXTI0_1_IRQn, 3);
    
     //GPIO_InitTypeDef initStr = {GPIO_PIN_6 | GPIO_PIN_7,
     //GPIO_MODE_OUTPUT_PP,
@@ -160,8 +167,9 @@ int lab1_main(void) {
 
     
      
-    }+
+    }
 }
+
 //typedef enum {
  //   ...
 //    EXTI0_1_IRQn           = 5,  // External Interrupts 0 and 1
