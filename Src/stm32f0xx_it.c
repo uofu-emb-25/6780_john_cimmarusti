@@ -116,3 +116,16 @@ void EXTI0_1_IRQHandler(void) {
         HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_9);
     }
 }
+#include "timers.h"
+
+// TIM2 Initialization - Sets up a 4 Hz interrupt
+
+void TIM2_IRQHandler(void) {
+    if (TIM2->SR & TIM_SR_UIF) { // Check if update interrupt flag is set
+        TIM2->SR &= ~TIM_SR_UIF; // Clear the update interrupt flag
+
+        // Toggle PC8 & PC9 LEDs
+        HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_8);
+        HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_9);
+    }
+}

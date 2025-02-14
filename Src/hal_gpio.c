@@ -114,3 +114,17 @@ GPIO_PinState My_HAL_Debounce_ReadPin(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin) {
     
     return GPIO_PIN_RESET; // No stable press detected
 }
+
+
+void init_GPIO(void) {
+    // Enable GPIOC clock
+    RCC->AHBENR |= RCC_AHBENR_GPIOCEN;
+
+    // Set PC8 and PC9 as outputs
+    GPIOC->MODER &= ~(0xF << (8 * 2));  // Clear mode bits for PC8, PC9
+    GPIOC->MODER |= (0x1 << (8 * 2)) | (0x1 << (9 * 2));  // Set to output mode
+
+    // Initialize LEDs to OFF
+    GPIOC->ODR &= ~((1 << 8) | (1 << 9));
+   
+}
