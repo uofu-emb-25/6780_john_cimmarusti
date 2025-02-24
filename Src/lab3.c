@@ -6,7 +6,7 @@ int lab3_main(void) {
     HAL_Init();
 
    
-
+    TIM3_GPIO_Init();
     // Initialize TIM3 PWM
     TIM3_PWM_Init();
 

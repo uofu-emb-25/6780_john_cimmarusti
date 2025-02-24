@@ -33,8 +33,8 @@ void TIM3_PWM_Init(void) {
     TIM3->CCER |= TIM_CCER_CC1E | TIM_CCER_CC2E;
 
     // 6. Set Initial Duty Cycle (20% Brightness)
-    TIM3->CCR1 = 100;  // 20% duty cycle for Red LED
-    TIM3->CCR2 = 100;  // 20% duty cycle for Blue LED
+    TIM3->CCR1 = 50;  // 20% duty cycle for Red LED
+    TIM3->CCR2 = 10;  // 20% duty cycle for Blue LED
 
     // 7. Start TIM3
     TIM3->CR1 |= TIM_CR1_CEN;
