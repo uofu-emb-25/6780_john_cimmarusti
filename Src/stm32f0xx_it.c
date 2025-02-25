@@ -78,7 +78,7 @@ void SysTick_Handler(void) {
     tick_counter++; // Increment every 1ms
 
     if (tick_counter >= 200) { // Every 200ms
-        HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_7); // Toggle Blue LED (PC7)
+        //HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_7); // Toggle Blue LED (PC7)
         tick_counter = 0; // Reset counter
     }
 }
