@@ -1,13 +1,11 @@
 #ifndef USART_H
 #define USART_H
 
-#include "stm32f0xx.h"
-#include "stm32f0xx_hal.h"
-
-void USART3_GPIO_Init(void);
-void USART3_Init(void);
-char USART3_Read(void);
-void USART3_Write(char data);
-void USART3_Write_String(char *str);
-
+void USART3_Init(void) ;
+void GPIO_Init(void);
+void USART3_SendChar(char c) ;
+char USART3_ReceiveChar(void);
+void USART3_SendString(char *str);
+void Toggle_LED(char received);
+void USART3_Reset(void) ;
 #endif // USART_H
