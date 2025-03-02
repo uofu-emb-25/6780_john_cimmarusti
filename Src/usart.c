@@ -74,3 +74,52 @@ void USART3_Reset(void) {
     USART3->CR1 &= ~USART_CR1_UE;  // Disable USART3
     USART3->CR1 |= USART_CR1_UE;   // Re-enable USART3
 }
+void Control_LED(char led, char action) {
+    uint16_t pin = 0;
+
+    // Map LED character to GPIO pin
+    switch (led) {
+        case 'r': pin = (1 << 6); break;  // Red LED (PC8)
+        case 'g': pin = (1 << 9); break;  // Green LED (PC7)
+        case 'b': pin = (1 << 7); break;  // Blue LED (PC9)
+        case 'o': pin = (1 << 8); break;  // Orange LED (PC6)
+        default:
+            USART3_SendString("Error: Invalid LED!\r\n");
+            return;
+    }
+    //Toggle_LED(led);
+    // Perform action based on the second character
+    switch (action) {
+        case '0':  // Turn OFF
+            GPIOC->ODR &= ~pin;
+            USART3_SendString("LED turned OFF\r\n");
+            break;
+        case '1':  // Turn ON
+            GPIOC->ODR |= pin;
+            USART3_SendString("LED turned ON\r\n");
+            break;
+        case '2':  // Toggle
+            GPIOC->ODR ^= pin;
+            USART3_SendString("LED toggled\r\n");
+            break;
+        default:
+            USART3_SendString("Error: Invalid Command!\r\n");
+            return;
+    }
+}
+void Command_Parser(void) {
+    while (1) {
+        USART3_SendString("CMD? ");  // Prompt user for input
+
+        char led = USART3_ReceiveChar();  // First character (LED)
+        char action = USART3_ReceiveChar();  // Second character (Action)
+
+        // Print received command
+        char buffer[20];
+        sprintf(buffer, "\r\nReceived: %c%c\r\n", led, action);
+        USART3_SendString(buffer);
+
+        // Process the command
+        Control_LED(led, action);
+    }
+}
