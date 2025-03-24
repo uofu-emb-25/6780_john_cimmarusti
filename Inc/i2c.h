@@ -1,12 +1,16 @@
 #ifndef I2C_H
 #define I2C_H
 
-#include "stm32f0xx.h"
-#include "stm32f0xx_hal.h"
+#include <stdint.h>
 
-void I2C2_Init(void);
-void I2C2_Init(void) ;
-#endif // I2C_H
+void I2C_Init(void);
+void setLED(uint32_t ledPos);
+
+int checkI2CStatusFlag(int flagBit);
+void gyroscope(int addr, int count, int *buffer, int isRead, int regAddr);
+#endif
+
+
 
 
 

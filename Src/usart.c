@@ -5,6 +5,32 @@
 
 #include "stm32f0xx.h" // Adjust for your STM32 series
 
+
+
+// Initialize GPIOs for USART3 (PC10 TX, PC11 RX)
+void USART3_GPIO_Init(void) {
+    // Enable GPIOC Clock
+    __HAL_RCC_GPIOC_CLK_ENABLE();
+
+    GPIO_InitTypeDef GPIO_InitStruct = {0};
+
+    // Configure PC10 as USART3_TX (Alternate Function)
+    GPIO_InitStruct.Pin = GPIO_PIN_10;
+    GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;  // Alternate function, push-pull
+    GPIO_InitStruct.Pull = GPIO_NOPULL;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+    GPIO_InitStruct.Alternate = GPIO_AF1_USART3; // AF1 for USART3 TX
+    HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+
+    // Configure PC11 as USART3_RX (Alternate Function)
+    GPIO_InitStruct.Pin = GPIO_PIN_11;
+    GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;  // Alternate function, push-pull
+    GPIO_InitStruct.Pull = GPIO_NOPULL;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+    GPIO_InitStruct.Alternate = GPIO_AF1_USART3; // AF1 for USART3 RX
+    HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+}
+
 void USART3_Init(void) {
     // Enable Clocks
     RCC->AHBENR |= RCC_AHBENR_GPIOBEN;  // Enable GPIOB clock
@@ -36,7 +62,23 @@ void USART3_SendChar(char c) {
     while (!(USART3->ISR & USART_ISR_TXE));  // Wait until TX is empty
     USART3->TDR = c;
 }
+char USART3_Read(void) {
+    while (!(USART3->ISR & USART_ISR_RXNE)); // Wait for RXNE (Read Register Not Empty)
+    return USART3->RDR; // Read received byte
+}
 
+// Transmit a single character
+void USART3_Write(char data) {
+    while (!(USART3->ISR & USART_ISR_TXE)); // Wait until TXE (Transmit Register Empty)
+    USART3->TDR = data; // Send character
+}
+
+// Transmit a string via USART
+void USART3_Write_String(char *str) {
+    while (*str) {
+        USART3_Write(*str++);
+    }
+}
 char USART3_ReceiveChar(void) {
     while (!(USART3->ISR & USART_ISR_RXNE));  // Wait for RX buffer to be filled
     return USART3->RDR;
@@ -123,3 +165,42 @@ void Command_Parser(void) {
         Control_LED(led, action);
     }
 }
+void USART2_GPIO_Init(void) {
+    __HAL_RCC_GPIOA_CLK_ENABLE();  // Enable GPIOA
+    __HAL_RCC_USART2_CLK_ENABLE(); // Enable USART2
+
+    GPIO_InitTypeDef GPIO_InitStruct = {0};
+
+    // 📌 Configure PA2 (USART2 TX) as Alternate Function
+    GPIO_InitStruct.Pin = GPIO_PIN_2;
+    GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+    GPIO_InitStruct.Pull = GPIO_NOPULL;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+    GPIO_InitStruct.Alternate = GPIO_AF1_USART2;
+    HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+}
+UART_HandleTypeDef huart2;
+
+void USART2_Init(void) {
+    huart2.Instance = USART2;
+    huart2.Init.BaudRate = 115200;
+    huart2.Init.WordLength = UART_WORDLENGTH_8B;
+    huart2.Init.StopBits = UART_STOPBITS_1;
+    huart2.Init.Parity = UART_PARITY_NONE;
+    huart2.Init.Mode = UART_MODE_TX;  // Only TX needed for printing
+    huart2.Init.HwFlowCtl = UART_HWCONTROL_NONE;
+    huart2.Init.OverSampling = UART_OVERSAMPLING_16;
+
+    if (HAL_UART_Init(&huart2) != HAL_OK) {
+        // Handle Error
+        while (1);
+    }
+}
+
+
+int _write1(int file, char *ptr, int len) {
+    HAL_UART_Transmit(&huart2, (uint8_t *)ptr, len, HAL_MAX_DELAY);
+    return len;
+}
+
+

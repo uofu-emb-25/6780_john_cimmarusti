@@ -10,4 +10,12 @@ void Toggle_LED(char received);
 void USART3_Reset(void) ;
 void Command_Parser(void);
 void Control_LED(char led, char action);
+void USART3_Write(char data);
+void USART3_Write_String(char *str);
+char USART3_Read(void);
+void USART3_GPIO_Init(void);
+
+
+void USART2_Init(void);
+void USART2_GPIO_Init(void) ;
 #endif // USART_H
