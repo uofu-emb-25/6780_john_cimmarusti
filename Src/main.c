@@ -15,8 +15,7 @@ int main(void)
   lab4_main();
   #elif defined(LAB5)
   lab5_main();
-  //int lab5_main_part2(void);
-  //int lab5_main_part2(void);
+
   #elif defined(LAB6)
   lab6_main();
   #elif defined(LAB7)
@@ -27,4 +26,3 @@ int main(void)
   #endif
 
 }
-//extern void SystemClock_Config(void);  // Prevent multiple definition error

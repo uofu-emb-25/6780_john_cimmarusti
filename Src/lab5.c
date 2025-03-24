@@ -4,9 +4,7 @@
 #include "hal_gpio.h"
 #include <stm32f0xx_hal.h>
 #include "i2c.h"
-//static inline void setLED(uint32_t ledPos) {
-//    GPIOC->ODR = (GPIOC->ODR & ~((1 << 6) | (1 << 7) | (1 << 8) | (1 << 9))) | (1 << ledPos);
-//}
+
 #define FILTER_DEPTH 4
 #define HIGH_THRESHOLD 550
 #define LOW_THRESHOLD 450
@@ -28,9 +26,6 @@ int16_t getAverage(int16_t *buffer) {
     return (int16_t)(sum / FILTER_DEPTH);
 }
 
-//static inline void setLED(uint32_t ledPos) {
-//    GPIOC->ODR = (GPIOC->ODR & ~((1 << 6) | (1 << 7) | (1 << 8) | (1 << 9))) | (1 << ledPos);
-//}
 
 void stableSetLED(int16_t xVal, int16_t yVal) {
     int newLed = -1;
@@ -84,8 +79,7 @@ int lab5_main(void)
         HAL_Delay(100);
         gyroscope(0x69, 4, sensorData, 1, 0x28);
      
-        //int16_t xVal = (sensorData[1] << 8) | sensorData[0];
-        //int16_t yVal = (sensorData[3] << 8) | sensorData[2];
+
         int16_t xRaw = (sensorData[1] << 8) | sensorData[0];
         int16_t yRaw = (sensorData[3] << 8) | sensorData[2];
         addToFilter(xRaw, yRaw);
